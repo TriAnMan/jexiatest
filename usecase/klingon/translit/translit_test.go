@@ -63,3 +63,56 @@ func TestNextChar(t *testing.T) {
 		a.NotNil(resChar, "possible chars")
 	}
 }
+
+func TestString(t *testing.T) {
+	a := assert.New(t)
+
+	var result []int
+	var err error
+	result, err = String("")
+	a.Nil(result, "empty name")
+	a.EqualError(err, "invalid Klingon name", "empty name")
+
+	for _, char := range missed {
+		result, err = String(string(char))
+		a.Nil(result, "missed characters")
+		a.EqualError(err, "invalid Klingon name", "missed characters")
+	}
+
+	for char := byte(0); char < 255; char++ {
+		if char >= byte('A') && char <= byte('Z') {
+			continue
+		}
+		if char >= byte('a') && char <= byte('z') {
+			continue
+		}
+		if char == byte(' ') || char == byte('\'') {
+			continue
+		}
+		result, err = String(string(char))
+		a.Nil(result, "invalid characters")
+		a.EqualError(err, "invalid Klingon name", "invalid characters")
+	}
+
+	for _, trans := range transitions {
+		result, err = String(string(trans.from))
+		a.Equal(trans.to, result, "valid characters")
+		a.Nil(err, "valid characters")
+	}
+
+	result, err = String("James Tiberius Kirk")
+	a.Nil(result, "name with invalid characters")
+	a.EqualError(err, "invalid Klingon name", "invalid characters")
+
+	result, err = String("Uhura")
+	a.Equal([]int{0xF8E5, 0xF8D6, 0xF8E5, 0xF8E1, 0xF8D0}, result, "valid name")
+	a.Nil(err, "valid name")
+
+	result, err = String("Leonard McCoy")
+	a.Equal(
+		[]int{0xF8D9, 0xF8D4, 0xF8DD, 0xF8DB, 0xF8D0, 0xF8E1, 0xF8D3, 0x0020, 0xF8DA, 0xF8D2, 0xF8D2, 0xF8DD, 0xF8E8},
+		result,
+		"valid name",
+	)
+	a.Nil(err, "valid name")
+}

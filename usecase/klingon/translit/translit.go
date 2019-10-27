@@ -5,6 +5,8 @@ package translit
 
 import (
 	"bytes"
+	"errors"
+	"regexp"
 	"strings"
 )
 
@@ -68,4 +70,27 @@ func nextChar(latin []byte, offset int) (klingon []int, nextOffset int) {
 	}
 
 	return nil, offset
+}
+
+var validKlingonName = regexp.MustCompile(`^[A-EG-JL-WYa-eg-jl-wy ']+$`)
+
+// String transliterates a person name from latin characters to Klingon alphabet
+func String(latin string) (klingon []int, err error) {
+	if !validKlingonName.MatchString(latin) {
+		return nil, errors.New("invalid Klingon name")
+	}
+
+	klingon = make([]int, 0, len(latin))
+	for offset := 0; offset < len(latin); {
+		var resultChars []int
+
+		resultChars, offset = nextChar([]byte(latin), offset)
+		if resultChars == nil {
+			panic("something goes wrong")
+		}
+
+		klingon = append(klingon, resultChars...)
+	}
+
+	return klingon, nil
 }
