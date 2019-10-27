@@ -4,7 +4,7 @@ This commandline tool transliterates names from Latin to Klingon alphabets
 ## Installation
 Install [Golang 1.12](https://golang.org/doc/install) or higher.
 
-Run `go get github.com/TriAnMan/jexiatest/...` and `go build github.com/TriAnMan/jexiatest/...`
+Run `go get github.com/TriAnMan/jexiatest/...` and `go build github.com/TriAnMan/jexiatest/cmd/klingon-translit`
 
 ## Run
 `./klingon-translit Leonard McCoy`

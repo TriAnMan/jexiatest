@@ -51,7 +51,7 @@ func main() {
 	}
 
 	if len(searchResp.Character) == 0 {
-		print("character not found")
+		println("character not found")
 		os.Exit(1)
 	}
 
@@ -78,13 +78,14 @@ func main() {
 			for _, spec := range charResp.Character.Species {
 				fmt.Printf("%s ", spec.Name)
 			}
+			fmt.Print("\n")
 			haveSpecies = true
 			break
 		}
 	}
 
 	if !haveSpecies {
-		print("species not found")
+		println("species not found")
 		os.Exit(1)
 	}
 }
